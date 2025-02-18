@@ -34,12 +34,10 @@ public class ScreenshotLayersClient implements ClientModInitializer {
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (builder != null) {
+            if (builder != null && !builder.isEmpty()) {
                 builder.saveTiff(screenshotFilename());
                 builder = null;
             }
-
-            if (captureKeybinding.wasPressed()) builder = new ScreenshotBuilder();
         });
 
     }

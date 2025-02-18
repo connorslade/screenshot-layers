@@ -33,4 +33,8 @@ public class ScreenshotBuilder {
 
         IJ.saveAsTiff(new ImagePlus("", imageStack), path);
     }
+
+    public boolean isEmpty() {
+        return this.stack.isEmpty();
+    }
 }

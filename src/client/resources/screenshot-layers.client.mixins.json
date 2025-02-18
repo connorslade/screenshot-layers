@@ -4,7 +4,8 @@
   "package": "com.connorcode.screenshotLayers.mixin.client",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "GameRendererMixin"
+    "GameRendererMixin",
+    "KeyboardMixin"
   ],
   "injectors": {
     "defaultRequire": 1
