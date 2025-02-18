@@ -27,7 +27,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     // Generic dependencies
-    implementation 'net.imagej:ij:1.53j'
+    implementation 'mil.nga:tiff:3.0.0'
 }
 
 processResources {

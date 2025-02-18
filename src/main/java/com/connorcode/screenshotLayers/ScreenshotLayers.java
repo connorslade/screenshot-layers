@@ -13,12 +13,12 @@ public class ScreenshotLayers implements ClientModInitializer {
     public static KeyBinding captureKeybinding;
     public static ScreenshotBuilder builder;
 
-    public static void screenshotLayer() {
+    public static void screenshotLayer(String name) {
         if (builder == null) return;
 
         var client = MinecraftClient.getInstance();
         var layer = takeScreenshot(client.getFramebuffer());
-        ScreenshotLayers.builder.pushLayer(layer);
+        ScreenshotLayers.builder.pushLayer(new ScreenshotBuilder.ScreenshotLayer(layer, name));
     }
 
     @Override
