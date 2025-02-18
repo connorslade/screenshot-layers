@@ -1,15 +1,18 @@
 package com.connorcode.screenshotLayers;
 
-import java.nio.file.Path;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.Util;
+
+import java.io.File;
 
 public class Misc {
-    public static Path withExtension(Path path, String extension) {
-        var fileName = path.getFileName().toString();
-        var dot = fileName.indexOf('.');
+    public static String screenshotFilename() {
+        var directory = new File(MinecraftClient.getInstance().runDirectory, "screenshots");
+        var time = Util.getFormattedCurrentTime();
 
-        if (dot == -1) fileName += "." + extension;
-        else fileName = fileName.substring(0, dot) + "." + extension;
-
-        return path.getParent().resolve(fileName);
+        for (int i = 1; ; i++) {
+            File file = new File(directory, time + (i == 1 ? "" : "_" + i) + ".tif");
+            if (!file.exists()) return file.getPath();
+        }
     }
 }

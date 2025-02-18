@@ -9,38 +9,28 @@ import net.minecraft.client.texture.NativeImage;
 import java.util.Stack;
 
 public class ScreenshotBuilder {
-    Stack<ScreenshotLayer> stack;
+    Stack<NativeImage> stack;
 
     public ScreenshotBuilder() {
         this.stack = new Stack<>();
     }
 
-    public void pushLayer(ScreenshotLayer layer) {
+    public void pushLayer(NativeImage layer) {
         this.stack.push(layer);
     }
 
-    public void saveTiff() {
+    public void saveTiff(String path) {
         var imageStack = new ImageStack();
 
         for (var layer : this.stack) {
-            var width = layer.image.getWidth();
-            var height = layer.image.getHeight();
-            var data = layer.image.copyPixelsArgb();
+            var width = layer.getWidth();
+            var height = layer.getHeight();
+            var data = layer.copyPixelsArgb();
 
             var image = new ColorProcessor(width, height, data);
-            imageStack.addSlice(layer.name, image);
+            imageStack.addSlice("", image);
         }
 
-        IJ.saveAsTiff(new ImagePlus("title", imageStack), "out.tiff");
-    }
-
-    public static class ScreenshotLayer {
-        NativeImage image;
-        String name;
-
-        public ScreenshotLayer(NativeImage image, String name) {
-            this.image = image;
-            this.name = name;
-        }
+        IJ.saveAsTiff(new ImagePlus("", imageStack), path);
     }
 }
