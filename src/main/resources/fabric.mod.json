@@ -11,18 +11,11 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.connorcode.screenshotLayers.client.ScreenshotLayersClient"
-    ],
-    "main": [
       "com.connorcode.screenshotLayers.ScreenshotLayers"
     ]
   },
   "mixins": [
-    "screenshot-layers.mixins.json",
-    {
-      "config": "screenshot-layers.client.mixins.json",
-      "environment": "client"
-    }
+    "screenshot-layers.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",

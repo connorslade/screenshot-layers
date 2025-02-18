@@ -1,6 +1,6 @@
-package com.connorcode.screenshotLayers.mixin.client;
+package com.connorcode.screenshotLayers.mixin;
 
-import com.connorcode.screenshotLayers.client.ScreenshotLayersClient;
+import com.connorcode.screenshotLayers.ScreenshotLayers;
 import net.minecraft.client.render.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,22 +17,22 @@ public class GameRendererMixin {
 
     @Inject(method = "renderWorld", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z"))
     void onRenderWorldBeforeHand(CallbackInfo ci) {
-        if (this.renderHand) ScreenshotLayersClient.screenshotLayer();
+        if (this.renderHand) ScreenshotLayers.screenshotLayer();
     }
 
     @Inject(method = "renderWorld", at = @At("TAIL"))
     void onRenderWorldTail(CallbackInfo ci) {
-        ScreenshotLayersClient.screenshotLayer();
+        ScreenshotLayers.screenshotLayer();
     }
 
     @Inject(method = "render", at = @At("TAIL"))
     void onRenderInGameHud(CallbackInfo ci) {
-        ScreenshotLayersClient.screenshotLayer();
+        ScreenshotLayers.screenshotLayer();
 
-        var builder = ScreenshotLayersClient.builder;
+        var builder = ScreenshotLayers.builder;
         if (builder != null && !builder.isEmpty()) {
             builder.saveTiff(screenshotFilename());
-            ScreenshotLayersClient.builder = null;
+            ScreenshotLayers.builder = null;
         }
     }
 }
