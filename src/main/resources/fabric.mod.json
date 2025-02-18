@@ -4,8 +4,13 @@
   "version": "${version}",
   "name": "screenshot-layers",
   "description": "",
-  "authors": [],
-  "contact": {},
+  "authors": [
+    "Conor Slade"
+  ],
+  "contact": {
+    "sources": "https://github.com/connorslade/screenshot-layers",
+    "issues": "https://github.com/connorslade/screenshot-layers/issues"
+  },
   "license": "All-Rights-Reserved",
   "icon": "assets/screenshot-layers/icon.png",
   "environment": "client",
