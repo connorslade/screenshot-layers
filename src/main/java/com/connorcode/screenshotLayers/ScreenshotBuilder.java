@@ -22,7 +22,7 @@ public class ScreenshotBuilder {
     public void saveTiff(String path) {
         var imageStack = new ImageStack();
 
-        for (var layer : this.stack) {
+        for (var layer : this.stack.reversed()) {
             var width = layer.getWidth();
             var height = layer.getHeight();
             var data = layer.copyPixelsArgb();
