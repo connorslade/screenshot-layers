@@ -49,14 +49,16 @@ public class GameRendererMixin {
 
         var builder = ScreenshotLayers.builder;
         if (builder != null && !builder.isEmpty()) {
-            var chat = client.inGameHud.getChatHud();
-            var file = screenshotFilename();
-            try {
-                builder.saveTiff(file);
-                chat.addMessage(Text.literal(String.format("Saved screenshot as %s", file.getName())));
-            } catch (IOException e) {
-                chat.addMessage(Text.literal(String.format("Failed to take screenshot: %s", e.getMessage())));
-            }
+            new Thread(() -> {
+                var chat = client.inGameHud.getChatHud();
+                var file = screenshotFilename();
+                try {
+                    builder.saveTiff(file);
+                    chat.addMessage(Text.literal(String.format("Saved screenshot as %s", file.getName())));
+                } catch (IOException e) {
+                    chat.addMessage(Text.literal(String.format("Failed to take screenshot: %s", e.getMessage())));
+                }
+            }).start();
             ScreenshotLayers.builder = null;
         }
     }
