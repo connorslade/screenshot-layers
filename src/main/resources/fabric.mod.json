@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "screenshot-layers",
   "version": "${version}",
-  "name": "screenshot-layers",
+  "name": "Screenshot Layers",
   "description": "",
   "authors": [
     "Conor Slade"

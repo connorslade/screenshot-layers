@@ -10,6 +10,10 @@ base {
     archivesName = project.archives_base_name
 }
 
+configurations {
+    addtojar
+}
+
 repositories {
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
@@ -28,6 +32,7 @@ dependencies {
 
     // Generic dependencies
     implementation 'mil.nga:tiff:3.0.0'
+    addtojar 'mil.nga:tiff:3.0.0'
 }
 
 processResources {
@@ -67,8 +72,14 @@ java {
 }
 
 jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
     from("LICENSE") {
         rename { "${it}_${project.archivesBaseName}" }
+    }
+
+    from {
+        configurations.addtojar.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
     }
 }
 
