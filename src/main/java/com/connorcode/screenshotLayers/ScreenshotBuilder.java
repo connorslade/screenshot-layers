@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Stack;
 
 public class ScreenshotBuilder {
+    public boolean wasHudHidden;
     Stack<ScreenshotLayer> stack;
 
     public ScreenshotBuilder() {
@@ -25,7 +26,10 @@ public class ScreenshotBuilder {
     public void saveTiff(File file) throws IOException {
         var directories = new ArrayList<FileDirectory>();
 
-        for (var layer : this.stack.reversed()) {
+        var stack = this.stack.stream().toList();
+        if (!wasHudHidden) stack = this.stack.reversed();
+
+        for (var layer : stack) {
             var image = layer.image;
             var rasters = new Rasters(
                     image.getWidth(),

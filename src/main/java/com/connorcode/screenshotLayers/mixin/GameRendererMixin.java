@@ -20,10 +20,16 @@ import static com.connorcode.screenshotLayers.Misc.screenshotFilename;
 public class GameRendererMixin {
     @Shadow
     private boolean renderHand;
-
     @Shadow
     @Final
     private MinecraftClient client;
+
+    @Inject(method = "render", at = @At("HEAD"))
+    void onRender(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
+        if (ScreenshotLayers.builder == null) return;
+        ScreenshotLayers.builder.wasHudHidden = client.options.hudHidden;
+        client.options.hudHidden = false;
+    }
 
     @Inject(method = "renderWorld", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z"))
     void onRenderWorldBeforeHand(CallbackInfo ci) {
@@ -37,26 +43,31 @@ public class GameRendererMixin {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;clear(I)V", ordinal = 1))
     void onFirstDrawContextDraw(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
-        var inGameHud = (InGameHudAccessor) client.inGameHud;
-        var showAutosave = client.options.getShowAutosaveIndicator().getValue() && (inGameHud.getAutosaveIndicatorAlpha() > 0.0 || inGameHud.getLastAutosaveIndicatorAlpha() > 0.0);
-        if (client.getOverlay() != null || client.currentScreen != null || showAutosave)
-            ScreenshotLayers.screenshotLayer("In Game HUD");
+        ScreenshotLayers.screenshotLayer("In Game HUD");
     }
 
     @Inject(method = "render", at = @At("TAIL"))
     void onRenderInGameHud(CallbackInfo ci) {
-        ScreenshotLayers.screenshotLayer(client.currentScreen == null ? "Overlay" : "Screen");
+        var inGameHud = (InGameHudAccessor) client.inGameHud;
+        var showAutosave = client.options.getShowAutosaveIndicator().getValue() && (inGameHud.getAutosaveIndicatorAlpha() > 0.0 || inGameHud.getLastAutosaveIndicatorAlpha() > 0.0);
+        if (client.currentScreen != null || showAutosave)
+            ScreenshotLayers.screenshotLayer("Screen");
+
 
         var builder = ScreenshotLayers.builder;
         if (builder != null && !builder.isEmpty()) {
+            client.options.hudHidden = builder.wasHudHidden;
+
             new Thread(() -> {
                 var chat = client.inGameHud.getChatHud();
                 var file = screenshotFilename();
                 try {
                     builder.saveTiff(file);
-                    chat.addMessage(Text.literal(String.format("Saved screenshot as %s", file.getName())));
+                    if (client.world != null)
+                        chat.addMessage(Text.literal(String.format("Saved screenshot as %s", file.getName())));
                 } catch (IOException e) {
-                    chat.addMessage(Text.literal(String.format("Failed to take screenshot: %s", e.getMessage())));
+                    if (client.world != null)
+                        chat.addMessage(Text.literal(String.format("Failed to take screenshot: %s", e.getMessage())));
                 }
             }).start();
             ScreenshotLayers.builder = null;
