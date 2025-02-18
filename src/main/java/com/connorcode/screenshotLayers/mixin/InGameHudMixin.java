@@ -29,6 +29,12 @@ public class InGameHudMixin {
         ScreenshotLayers.screenshotLayer("Overlays");
     }
 
+    @Inject(method = "renderExperienceLevel", at = @At("TAIL"))
+    void onRenderExperienceLevelTail(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
+        context.draw();
+        ScreenshotLayers.screenshotLayer("Hotbar");
+    }
+
     @Unique
     boolean needsOverlayLayer() {
         if (client.options.getPerspective().isFirstPerson()) {
