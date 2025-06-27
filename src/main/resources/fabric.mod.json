@@ -19,6 +19,7 @@
       "com.connorcode.screenshotLayers.ScreenshotLayers"
     ]
   },
+  "accessWidener": "screenshot-layers.accesswidener",
   "mixins": [
     "screenshot-layers.mixins.json"
   ],

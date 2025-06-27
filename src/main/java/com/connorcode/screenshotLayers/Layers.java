@@ -1,6 +1,5 @@
 package com.connorcode.screenshotLayers;
 
-import com.connorcode.screenshotLayers.mixin.InGameHudAccessor;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EquipmentSlot;
 
@@ -33,8 +32,7 @@ public class Layers {
     }
 
     private static boolean needsScreenLayer() {
-        var inGameHud = (InGameHudAccessor) client.inGameHud;
-        var showAutosave = client.options.getShowAutosaveIndicator().getValue() && (inGameHud.getAutosaveIndicatorAlpha() > 0.0 || inGameHud.getLastAutosaveIndicatorAlpha() > 0.0);
+        var showAutosave = client.options.getShowAutosaveIndicator().getValue() && (client.inGameHud.autosaveIndicatorAlpha > 0.0 || client.inGameHud.lastAutosaveIndicatorAlpha > 0.0);
         return client.currentScreen != null || showAutosave;
     }
 

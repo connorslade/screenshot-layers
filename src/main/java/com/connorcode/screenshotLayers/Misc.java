@@ -1,6 +1,5 @@
 package com.connorcode.screenshotLayers;
 
-import com.connorcode.screenshotLayers.mixin.GameRendererAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.fog.FogRenderer;
 import net.minecraft.util.Util;
@@ -25,10 +24,21 @@ public class Misc {
     }
 
     public static void renderGui() {
-        var gameRenderer = ((GameRendererAccessor) client.gameRenderer);
-        var guiRenderer = gameRenderer.getGuiRenderer();
+        var guiRenderer = client.gameRenderer.guiRenderer;
+        var emptyBuffer = client.gameRenderer.fogRenderer.getFogBuffer(FogRenderer.FogType.NONE);
 
-        guiRenderer.render(gameRenderer.getFogRenderer().getFogBuffer(FogRenderer.FogType.NONE));
-        guiRenderer.incrementFrame();
+        guiRenderer.prepare();
+        guiRenderer.blurLayer = guiRenderer.draws.size();
+        guiRenderer.renderPreparedDraws(emptyBuffer);
+
+        guiRenderer.state.goUpLayer();
+
+        for (var buffer : guiRenderer.bufferByVertexFormat.values()) buffer.rotate();
+
+        guiRenderer.draws.clear();
+        guiRenderer.preparations.clear();
+        guiRenderer.state.createNewRootLayer();
+        guiRenderer.state.blurLayer = Integer.MAX_VALUE;
+        guiRenderer.blurLayer = Integer.MAX_VALUE;
     }
 }
