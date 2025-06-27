@@ -10,16 +10,9 @@ import org.lwjgl.glfw.GLFW;
 import static net.minecraft.client.util.ScreenshotRecorder.takeScreenshot;
 
 public class ScreenshotLayers implements ClientModInitializer {
+    public static MinecraftClient client = MinecraftClient.getInstance();
     public static KeyBinding captureKeybinding;
     public static ScreenshotBuilder builder;
-
-    public static void screenshotLayer(String name) {
-        if (builder == null) return;
-
-        var client = MinecraftClient.getInstance();
-        var layer = takeScreenshot(client.getFramebuffer());
-        ScreenshotLayers.builder.pushLayer(new ScreenshotBuilder.ScreenshotLayer(layer, name));
-    }
 
     @Override
     public void onInitializeClient() {
@@ -29,5 +22,13 @@ public class ScreenshotLayers implements ClientModInitializer {
                 GLFW.GLFW_KEY_F2,
                 "category.screenshot-layers"
         ));
+    }
+
+    public static void screenshotLayer(String name, int n) {
+        if (builder == null) return;
+
+        takeScreenshot(client.getFramebuffer(), layer -> {
+            ScreenshotLayers.builder.pushLayer(new ScreenshotBuilder.ScreenshotLayer(layer, name), n);
+        });
     }
 }

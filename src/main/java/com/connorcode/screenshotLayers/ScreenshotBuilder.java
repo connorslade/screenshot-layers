@@ -3,24 +3,60 @@ package com.connorcode.screenshotLayers;
 import mil.nga.tiff.*;
 import mil.nga.tiff.util.TiffConstants;
 import net.minecraft.client.texture.NativeImage;
+import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Stack;
+
+import static com.connorcode.screenshotLayers.Misc.screenshotFilename;
+import static com.connorcode.screenshotLayers.ScreenshotLayers.client;
 
 public class ScreenshotBuilder {
     public boolean wasHudHidden;
-    Stack<ScreenshotLayer> stack;
+    List<ScreenshotLayer> stack;
 
-    public ScreenshotBuilder() {
-        this.stack = new Stack<>();
+    public ScreenshotBuilder(int n) {
+        this.stack = new ArrayList<>(Collections.nCopies(n, null));
     }
 
-    public void pushLayer(ScreenshotLayer layer) {
-        this.stack.push(layer);
+    public void pushLayer(ScreenshotLayer layer, int n) {
+        assert this.stack.get(n) == null;
+
+        this.stack.set(n, layer);
+        if (this.isComplete()) flush();
+    }
+
+    private boolean isComplete() {
+        for (ScreenshotLayer layer : stack) {
+            if (layer == null) return false;
+        }
+        return true;
+    }
+
+    // todo: this ugly
+    private void flush() {
+        var builder = ScreenshotLayers.builder;
+        if (builder != null && !builder.isEmpty()) {
+            client.options.hudHidden = builder.wasHudHidden;
+
+            new Thread(() -> {
+                var chat = client.inGameHud.getChatHud();
+                var file = screenshotFilename();
+                try {
+                    builder.saveTiff(file);
+                    if (client.world != null)
+                        chat.addMessage(Text.literal(String.format("Saved screenshot as %s", file.getName())));
+                } catch (IOException e) {
+                    if (client.world != null)
+                        chat.addMessage(Text.literal(String.format("Failed to take screenshot: %s", e.getMessage())));
+                }
+            }).start();
+            ScreenshotLayers.builder = null;
+        }
     }
 
     public void saveTiff(File file) throws IOException {

@@ -15,4 +15,8 @@ public class Misc {
             if (!file.exists()) return file;
         }
     }
+
+    public static int asInt(boolean bool) {
+        return bool ? 1 : 0;
+    }
 }
