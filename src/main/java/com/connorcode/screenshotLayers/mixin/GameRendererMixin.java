@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.connorcode.screenshotLayers.Misc.asInt;
+import static com.connorcode.screenshotLayers.Misc.renderGui;
 import static com.connorcode.screenshotLayers.ScreenshotLayers.builder;
 import static com.connorcode.screenshotLayers.ScreenshotLayers.client;
 
@@ -23,25 +24,26 @@ public class GameRendererMixin {
 
     @Inject(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/GameRenderer;renderHand(FZLorg/joml/Matrix4f;)V"))
     void onRenderWorldBeforeHand(CallbackInfo ci) {
-        if (builder != null)
-            ScreenshotLayers.screenshotLayer("World", 0);
+        if (builder == null) return;
+        ScreenshotLayers.screenshotLayer("World", 0);
     }
 
     @Inject(method = "renderWorld", at = @At("TAIL"))
     void onRenderWorldTail(CallbackInfo ci) {
-        if (builder != null && builder.layers.hand)
-            ScreenshotLayers.screenshotLayer("Player Hand", 1);
+        if (builder == null || !builder.layers.hand) return;
+        ScreenshotLayers.screenshotLayer("Player Hand", 1);
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;render(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/client/render/RenderTickCounter;)V", shift = At.Shift.AFTER))
     void onFirstDrawContextDraw(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
-        if (builder != null)
-            ScreenshotLayers.screenshotLayer("In Game HUD", 2 + asInt(builder.layers.hand) + asInt(builder.layers.overlay));
+        if (builder == null) return;
+        renderGui();
+        ScreenshotLayers.screenshotLayer("In Game HUD", 2 + asInt(builder.layers.hand) + asInt(builder.layers.overlay));
     }
 
     @Inject(method = "render", at = @At("TAIL"))
     void onRenderInGameHud(CallbackInfo ci) {
-        if (builder != null && builder.layers.screen)
-            ScreenshotLayers.screenshotLayer("Screen", 3 + asInt(builder.layers.hand) + asInt(builder.layers.overlay));
+        if (builder == null || !builder.layers.screen) return;
+        ScreenshotLayers.screenshotLayer("Screen", 3 + asInt(builder.layers.hand) + asInt(builder.layers.overlay));
     }
 }
