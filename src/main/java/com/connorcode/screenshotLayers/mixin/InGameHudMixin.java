@@ -18,15 +18,15 @@ public class InGameHudMixin {
     void onRenderMiscOverlaysTail(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         if (builder == null || !builder.layers.overlay) return;
 
-        context.draw();
+//        context.draw();
         ScreenshotLayers.screenshotLayer("Overlays", 1 + asInt(builder.layers.hand));
     }
 
-    @Inject(method = "renderExperienceLevel", at = @At("TAIL"))
+    @Inject(method = "renderMainHud", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/bar/Bar;drawExperienceLevel(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/client/font/TextRenderer;I)V", shift = At.Shift.AFTER))
     void onRenderExperienceLevelTail(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         if(builder == null) return;
 
-        context.draw();
+//        context.draw();
         ScreenshotLayers.screenshotLayer("Hotbar", 1 + asInt(builder.layers.hand) + asInt(builder.layers.overlay));
     }
 }

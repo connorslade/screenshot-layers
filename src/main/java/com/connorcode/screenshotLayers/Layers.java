@@ -1,6 +1,5 @@
 package com.connorcode.screenshotLayers;
 
-import com.connorcode.screenshotLayers.mixin.GameRendererAccessor;
 import com.connorcode.screenshotLayers.mixin.InGameHudAccessor;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EquipmentSlot;
@@ -30,7 +29,7 @@ public class Layers {
     }
 
     private static boolean needsHandLayer() {
-        return ((GameRendererAccessor) client.gameRenderer).getRenderHand();
+        return client.options.getPerspective().isFirstPerson();
     }
 
     private static boolean needsScreenLayer() {

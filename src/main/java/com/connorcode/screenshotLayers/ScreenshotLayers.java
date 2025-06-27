@@ -28,6 +28,7 @@ public class ScreenshotLayers implements ClientModInitializer {
         if (builder == null) return;
 
         takeScreenshot(client.getFramebuffer(), layer -> {
+            if (ScreenshotLayers.builder == null) return;
             ScreenshotLayers.builder.pushLayer(new ScreenshotBuilder.ScreenshotLayer(layer, name), n);
         });
     }

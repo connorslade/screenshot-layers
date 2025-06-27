@@ -21,7 +21,7 @@ public class GameRendererMixin {
         client.options.hudHidden = false;
     }
 
-    @Inject(method = "renderWorld", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z"))
+    @Inject(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/GameRenderer;renderHand(FZLorg/joml/Matrix4f;)V"))
     void onRenderWorldBeforeHand(CallbackInfo ci) {
         if (builder != null)
             ScreenshotLayers.screenshotLayer("World", 0);
@@ -33,7 +33,7 @@ public class GameRendererMixin {
             ScreenshotLayers.screenshotLayer("Player Hand", 1);
     }
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;draw()V", ordinal = 0))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;render(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/client/render/RenderTickCounter;)V", shift = At.Shift.AFTER))
     void onFirstDrawContextDraw(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
         if (builder != null)
             ScreenshotLayers.screenshotLayer("In Game HUD", 2 + asInt(builder.layers.hand) + asInt(builder.layers.overlay));
