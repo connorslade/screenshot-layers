@@ -9,6 +9,7 @@ accessible field net/minecraft/client/gui/render/GuiRenderer preparations Ljava/
 accessible field net/minecraft/client/gui/render/GuiRenderer state Lnet/minecraft/client/gui/render/state/GuiRenderState;
 accessible field net/minecraft/client/gui/render/GuiRenderer blurLayer I
 accessible field net/minecraft/client/gui/render/state/GuiRenderState blurLayer I
+accessible field net/minecraft/client/gui/render/state/GuiRenderState rootLayers Ljava/util/List;
 accessible method net/minecraft/client/gui/render/GuiRenderer prepare ()V
 accessible method net/minecraft/client/gui/render/GuiRenderer renderPreparedDraws (Lcom/mojang/blaze3d/buffers/GpuBufferSlice;)V
 # Layers::needsScreenLayer

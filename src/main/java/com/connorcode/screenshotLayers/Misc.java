@@ -1,5 +1,6 @@
 package com.connorcode.screenshotLayers;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.fog.FogRenderer;
 import net.minecraft.util.Util;
@@ -27,18 +28,7 @@ public class Misc {
         var guiRenderer = client.gameRenderer.guiRenderer;
         var emptyBuffer = client.gameRenderer.fogRenderer.getFogBuffer(FogRenderer.FogType.NONE);
 
-        guiRenderer.prepare();
-        guiRenderer.blurLayer = guiRenderer.draws.size();
-        guiRenderer.renderPreparedDraws(emptyBuffer);
-
-        guiRenderer.state.goUpLayer();
-
-        for (var buffer : guiRenderer.bufferByVertexFormat.values()) buffer.rotate();
-
-        guiRenderer.draws.clear();
-        guiRenderer.preparations.clear();
-        guiRenderer.state.createNewRootLayer();
-        guiRenderer.state.blurLayer = Integer.MAX_VALUE;
-        guiRenderer.blurLayer = Integer.MAX_VALUE;
+        guiRenderer.render(emptyBuffer);
+        RenderSystem.getDevice().createCommandEncoder().clearDepthTexture(client.getFramebuffer().getDepthAttachment(), 1.0);
     }
 }
