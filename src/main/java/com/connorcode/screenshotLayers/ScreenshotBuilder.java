@@ -17,10 +17,12 @@ import static com.connorcode.screenshotLayers.ScreenshotLayers.client;
 
 public class ScreenshotBuilder {
     public boolean wasHudHidden;
+    public Layers layers;
     List<ScreenshotLayer> stack;
 
-    public ScreenshotBuilder(int n) {
-        this.stack = new ArrayList<>(Collections.nCopies(n, null));
+    public ScreenshotBuilder() {
+        this.layers = new Layers();
+        this.stack = new ArrayList<>(Collections.nCopies(this.layers.layerCount(), null));
     }
 
     public void pushLayer(ScreenshotLayer layer, int n) {

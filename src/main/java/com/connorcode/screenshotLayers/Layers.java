@@ -15,22 +15,31 @@ import static com.connorcode.screenshotLayers.ScreenshotLayers.client;
 // 5. In Game GUI
 // 6. Screen (Optional)
 public class Layers {
-    public static int layerCount() {
-        return 3 + Misc.asInt(needHandLayer()) + Misc.asInt(needsScreenLayer()) + Misc.asInt(needsOverlayLayer());
+    public boolean hand;
+    public boolean screen;
+    public boolean overlay;
+
+    public Layers() {
+        this.hand = needsHandLayer();
+        this.screen = needsScreenLayer();
+        this.overlay = needsOverlayLayer();
     }
 
-    public static boolean needHandLayer() {
+    public int layerCount() {
+        return 3 + Misc.asInt(hand) + Misc.asInt(screen) + Misc.asInt(overlay);
+    }
+
+    private static boolean needsHandLayer() {
         return ((GameRendererAccessor) client.gameRenderer).getRenderHand();
     }
 
-    public static boolean needsScreenLayer() {
+    private static boolean needsScreenLayer() {
         var inGameHud = (InGameHudAccessor) client.inGameHud;
         var showAutosave = client.options.getShowAutosaveIndicator().getValue() && (inGameHud.getAutosaveIndicatorAlpha() > 0.0 || inGameHud.getLastAutosaveIndicatorAlpha() > 0.0);
         return client.currentScreen != null || showAutosave;
     }
 
-    // todo: dont recompute these during a screenshot operations (TOC-TOU also just performance)
-    public static boolean needsOverlayLayer() {
+    private static boolean needsOverlayLayer() {
         if (client.player == null) return false;
         if (client.options.getPerspective().isFirstPerson()) {
             if (client.player.isUsingSpyglass()) return true;
