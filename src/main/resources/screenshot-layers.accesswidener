@@ -3,15 +3,6 @@ accessWidener v2 named
 # Misc::renderGui
 accessible field net/minecraft/client/render/GameRenderer guiRenderer Lnet/minecraft/client/gui/render/GuiRenderer;
 accessible field net/minecraft/client/render/GameRenderer fogRenderer Lnet/minecraft/client/render/fog/FogRenderer;
-accessible field net/minecraft/client/gui/render/GuiRenderer bufferByVertexFormat Ljava/util/Map;
-accessible field net/minecraft/client/gui/render/GuiRenderer draws Ljava/util/List;
-accessible field net/minecraft/client/gui/render/GuiRenderer preparations Ljava/util/List;
-accessible field net/minecraft/client/gui/render/GuiRenderer state Lnet/minecraft/client/gui/render/state/GuiRenderState;
-accessible field net/minecraft/client/gui/render/GuiRenderer blurLayer I
-accessible field net/minecraft/client/gui/render/state/GuiRenderState blurLayer I
-accessible field net/minecraft/client/gui/render/state/GuiRenderState rootLayers Ljava/util/List;
-accessible method net/minecraft/client/gui/render/GuiRenderer prepare ()V
-accessible method net/minecraft/client/gui/render/GuiRenderer renderPreparedDraws (Lcom/mojang/blaze3d/buffers/GpuBufferSlice;)V
 # Layers::needsScreenLayer
 accessible field net/minecraft/client/gui/hud/InGameHud autosaveIndicatorAlpha F
 accessible field net/minecraft/client/gui/hud/InGameHud lastAutosaveIndicatorAlpha F

@@ -29,6 +29,8 @@ public class Misc {
         var emptyBuffer = client.gameRenderer.fogRenderer.getFogBuffer(FogRenderer.FogType.NONE);
 
         guiRenderer.render(emptyBuffer);
+
+        // it took me way to long to figure out i just needed to clear the depth buffer to get correct layering :sob:
         RenderSystem.getDevice().createCommandEncoder().clearDepthTexture(client.getFramebuffer().getDepthAttachment(), 1.0);
     }
 }

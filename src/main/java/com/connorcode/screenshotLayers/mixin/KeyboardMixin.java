@@ -14,6 +14,9 @@ import static com.connorcode.screenshotLayers.ScreenshotLayers.captureKeybinding
 public class KeyboardMixin {
     @Inject(method = "onKey", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBinding;matchesKey(II)Z", ordinal = 1))
     void onKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
-        if (captureKeybinding.matchesKey(key, scancode)) ScreenshotLayers.builder = new ScreenshotBuilder();
+        if (captureKeybinding.matchesKey(key, scancode)) {
+            ScreenshotLayers.builder = new ScreenshotBuilder();
+            if (ScreenshotLayers.builder.layers.basic) ScreenshotLayers.screenshotLayer("Main", 0);
+        }
     }
 }

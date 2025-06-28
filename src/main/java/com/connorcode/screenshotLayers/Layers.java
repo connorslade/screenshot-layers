@@ -13,17 +13,24 @@ import static com.connorcode.screenshotLayers.ScreenshotLayers.client;
 // 5. In Game GUI
 // 6. Screen (Optional)
 public class Layers {
+    // No layering, just take a normal screenshot. This is needed when not in game.
+    public boolean basic;
+
+    // Which of the optional layers are needed
     public boolean hand;
     public boolean screen;
     public boolean overlay;
 
     public Layers() {
-        this.hand = needsHandLayer();
-        this.screen = needsScreenLayer();
-        this.overlay = needsOverlayLayer();
+        this.basic = client.player == null;
+
+        this.hand = needsHandLayer() && !basic;
+        this.screen = needsScreenLayer() && !basic;
+        this.overlay = needsOverlayLayer() && !basic;
     }
 
     public int layerCount() {
+        if (this.basic) return 1;
         return 3 + Misc.asInt(hand) + Misc.asInt(screen) + Misc.asInt(overlay);
     }
 
