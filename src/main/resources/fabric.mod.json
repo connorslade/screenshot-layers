@@ -5,7 +5,12 @@
   "name": "Screenshot Layers",
   "description": "",
   "authors": [
-    "Conor Slade"
+    {
+      "name": "Connor Slade",
+      "contact": {
+        "homepage": "https://connorcode.com"
+      }
+    }
   ],
   "contact": {
     "sources": "https://github.com/connorslade/screenshot-layers",
