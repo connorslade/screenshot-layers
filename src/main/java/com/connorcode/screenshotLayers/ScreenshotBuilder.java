@@ -25,6 +25,10 @@ public class ScreenshotBuilder {
         this.stack = new ArrayList<>(Collections.nCopies(this.layers.layerCount(), null));
     }
 
+    public void markLayer(int n) {
+        this.stack.set(n, new ScreenshotLayer(new NativeImage(1, 1, false), "pending"));
+    }
+
     public void pushLayer(ScreenshotLayer layer, int n) {
         assert this.stack.get(n) == null;
 
