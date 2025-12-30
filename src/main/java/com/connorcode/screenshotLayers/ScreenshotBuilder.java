@@ -26,24 +26,19 @@ public class ScreenshotBuilder {
     }
 
     public void markLayer(int n) {
-        this.stack.set(n, new ScreenshotLayer(new NativeImage(1, 1, false), "pending"));
+        this.stack.set(n, new ScreenshotLayer(new NativeImage(1, 1, false), "pending", true));
     }
 
     public void pushLayer(ScreenshotLayer layer, int n) {
         assert this.stack.get(n) == null;
-
         this.stack.set(n, layer);
         if (this.isComplete()) flush();
     }
 
     private boolean isComplete() {
-        for (ScreenshotLayer layer : stack) {
-            if (layer == null) return false;
-        }
-        return true;
+        return stack.stream().allMatch(l -> l != null && !l.placeholder);
     }
 
-    // todo: this ugly
     private void flush() {
         var builder = ScreenshotLayers.builder;
         if (builder != null && !builder.isEmpty()) {
@@ -55,10 +50,10 @@ public class ScreenshotBuilder {
                 try {
                     builder.saveTiff(file);
                     if (client.world != null)
-                        chat.addMessage(Text.literal(String.format("Saved screenshot as %s", file.getName())));
+                        client.send(() -> chat.addMessage(Text.literal(String.format("Saved screenshot as %s", file.getName()))));
                 } catch (IOException e) {
                     if (client.world != null)
-                        chat.addMessage(Text.literal(String.format("Failed to take screenshot: %s", e.getMessage())));
+                        client.send(() -> chat.addMessage(Text.literal(String.format("Failed to take screenshot: %s", e.getMessage()))));
                 }
             }).start();
             ScreenshotLayers.builder = null;
@@ -126,10 +121,17 @@ public class ScreenshotBuilder {
     public static class ScreenshotLayer {
         NativeImage image;
         String name;
+        boolean placeholder;
 
         public ScreenshotLayer(NativeImage image, String name) {
             this.image = image;
             this.name = name;
+        }
+
+        public ScreenshotLayer(NativeImage image, String name, boolean placeholder) {
+            this.image = image;
+            this.name = name;
+            this.placeholder = placeholder;
         }
     }
 }

@@ -10,7 +10,7 @@ A Minecraft mod that splits screenshots into multiple layers so you can retroact
 Once installed, a new keybind will be added to the list.
 You may want to unbind the default take screenshot key and bind <kbd>F2</kbd> to Screenshot Layer's capture binding.
 Screenshot Layers outputs .tiff files, as it's one of the few mainstream image formats that supports multiple layers.
-If you open one of these files in Photoshop, [PhotoPea](https://www.photopea.com), [GIMP](https://www.gimp.org), or another image editor, you can view and modify the individual layers separately.
+If you open one of these files in [PhotoPea](https://www.photopea.com), [GIMP](https://www.gimp.org), or another image editor, you can view and modify the individual layers separately.
 
 <ins>**Layers**</ins>
 

@@ -7,16 +7,19 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 public class ScreenshotLayers implements ClientModInitializer {
+    static final KeyBinding.Category CATEGORY = KeyBinding.Category.create(Identifier.of("screenshot-layers", "screenshot-layers"));
+
     public static MinecraftClient client = MinecraftClient.getInstance();
     public static KeyBinding captureKeybinding;
     public static ScreenshotBuilder builder;
 
     @Override
     public void onInitializeClient() {
-        captureKeybinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.screenshot-layers.capture", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_F2, "category.screenshot-layers"));
+        captureKeybinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.screenshot-layers.screenshot-layers.capture", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_F2, CATEGORY));
     }
 
     public static void screenshotLayer(String name, int n) {

@@ -28,8 +28,8 @@ public class InGameHudMixin {
         ScreenshotLayers.screenshotLayer("Overlays", 1 + asInt(builder.layers.hand));
     }
 
-    @Inject(method = "renderMainHud", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/bar/Bar;drawExperienceLevel(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/client/font/TextRenderer;I)V", shift = At.Shift.AFTER))
-    void onRenderExperienceLevelTail(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
+    @Inject(method = "renderMainHud", at = @At(value = "TAIL"))
+    void onRenderMainHudTail(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         if(builder == null) return;
 
         renderGui();
